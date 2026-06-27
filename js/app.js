@@ -200,6 +200,7 @@ const BANKS = {
             '¿Cuál sería tu primera reacción si tu pareja te fuera infiel?',
             'Si tu pareja quisiera permanecer virgen hasta el matrimonio, ¿lo aceptarías?',
             '¿Era una trampa! En tus próximos 3 turnos solo puedes elegir reto.',
+            '¿Prefieres tener sexo con la luz encendida o apagada?',
         ],
         retos: [
             { text: 'Susurra algo al oído de la persona que elijas de la sala.', format: 'presencial' },
