@@ -1,0 +1,19 @@
+/* Animación de entrada para las cards */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.player-card {
+  animation: slideIn 0.2s ease;
+}
+
+/* Resultado de IA con fade */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+#result-section {
+  animation: fadeIn 0.3s ease;
+}
