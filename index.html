@@ -1,75 +1,147 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="dracula">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Verdad o Reto</title>
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verdad o Reto</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/daisyui.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="min-h-screen bg-base-200 flex items-center justify-center p-4">
 
-  <!-- PANTALLA 1: Configuración de jugadores -->
-  <div id="screen-setup" class="w-full max-w-2xl">
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-primary mb-2">🎴 Verdad o Reto</h1>
-      <p class="text-base-content/60">Añade los jugadores para empezar</p>
-    </div>
-
-    <div id="players-list" class="flex flex-col gap-3 mb-4"></div>
-
-    <button id="btn-add-player" onclick="addPlayer()"
-      class="btn btn-outline btn-primary w-full mb-6">
-      + Añadir jugador
-    </button>
-
-    <button id="btn-start" onclick="startGame()"
-      class="btn btn-primary w-full text-lg" disabled>
-      ¡Empezar a jugar! 🎲
-    </button>
-  </div>
-
-  <!-- PANTALLA 2: Juego -->
-  <div id="screen-game" class="w-full max-w-xl hidden">
-    <div class="text-center mb-6">
-      <h1 class="text-3xl font-bold text-primary mb-1">🎴 Verdad o Reto</h1>
-      <div id="turn-info" class="text-base-content/70 text-sm"></div>
-    </div>
-
-    <!-- Card del jugador actual -->
-    <div class="card bg-base-100 shadow-xl mb-6">
-      <div class="card-body items-center text-center">
-        <div id="current-avatar" class="avatar placeholder mb-2">
-          <div class="bg-primary text-primary-content rounded-full w-16 text-2xl flex items-center justify-center"></div>
+    <!-- ══════════════════════════════════════════════
+              PANTALLA 1: Configuración
+    ══════════════════════════════════════════════ -->
+    <div id="screen-setup" class="w-full max-w-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-5xl font-black text-primary mb-2 tracking-tight">🎴 Verdad o Reto</h1>
+            <p class="text-base-content/50 text-sm uppercase tracking-widest">Configura la partida</p>
         </div>
-        <h2 id="current-name" class="card-title text-2xl"></h2>
-        <p id="current-sub" class="text-base-content/60 text-sm"></p>
-      </div>
+
+        <!-- Formato, modo y sistema de puntos -->
+        <div id="game-config"></div>
+
+        <!-- Lista de jugadores -->
+        <div id="players-list" class="flex flex-col gap-4 mb-4"></div>
+
+        <button id="btn-add-player" onclick="addPlayer()"
+            class="btn btn-outline btn-primary w-full mb-4">
+            + Añadir jugador
+        </button>
+
+        <button id="btn-start" onclick="startGame()"
+            class="btn btn-primary w-full text-lg font-bold" disabled>
+            ¡Empezar a jugar! 🎲
+        </button>
     </div>
 
-    <!-- Elección -->
-    <div id="choice-section" class="flex gap-4 mb-6">
-      <button onclick="chooseOption('verdad')"
-        class="btn btn-info flex-1 text-lg">🤔 Verdad</button>
-      <button onclick="chooseOption('reto')"
-        class="btn btn-warning flex-1 text-lg">🔥 Reto</button>
-    </div>
+    <!-- ══════════════════════════════════════════════
+              PANTALLA 2: Juego
+    ══════════════════════════════════════════════ -->
+    <div id="screen-game" class="w-full max-w-xl hidden">
 
-    <!-- Resultado -->
-    <div id="result-section" class="hidden">
-      <div class="card bg-base-100 shadow-xl mb-6">
-        <div class="card-body">
-          <div id="result-badge" class="badge mb-2"></div>
-          <p id="result-text" class="text-lg leading-relaxed"></p>
+        <!-- Cabecera -->
+        <div class="relative text-center mb-6">
+            <h1 class="text-3xl font-black text-primary mb-2 tracking-tight">🎴 Verdad o Reto</h1>
+            <div id="mode-badges" class="flex justify-center gap-2 mb-1"></div>
+            <div id="turn-info" class="text-base-content/50 text-xs uppercase tracking-widest mt-1"></div>
         </div>
-      </div>
-      <button onclick="nextTurn()" class="btn btn-primary w-full">
-        Siguiente turno →
-      </button>
-    </div>
-  </div>
 
-  <script src="js/app.js"></script>
+        <!-- Card del jugador actual -->
+        <div class="card bg-base-100 border border-base-300 shadow-xl mb-6">
+            <div class="card-body items-center text-center py-6">
+                <div id="current-avatar" class="avatar placeholder mb-3">
+                    <div class="bg-primary text-primary-content rounded-full w-20 text-3xl font-bold flex items-center justify-center shadow-lg"></div>
+                </div>
+                <h2 id="current-name" class="card-title text-3xl font-black"></h2>
+                <p id="current-sub" class="text-base-content/50 text-sm mt-1 mb-3"></p>
+                <div id="player-points" class="flex gap-3"></div>
+            </div>
+        </div>
+
+        <!-- Elección: Verdad o Reto -->
+        <div id="choice-section" class="grid grid-cols-2 gap-4 mb-6">
+            <button onclick="chooseOption('verdad')"
+                class="btn btn-info btn-lg text-lg font-bold h-20 flex-col gap-1">
+                <span class="text-2xl">🤔</span>
+                <span>Verdad</span>
+            </button>
+            <button onclick="chooseOption('reto')"
+                class="btn btn-warning btn-lg text-lg font-bold h-20 flex-col gap-1">
+                <span class="text-2xl">🔥</span>
+                <span>Reto</span>
+            </button>
+        </div>
+
+        <!-- Resultado + botones de cumplimiento -->
+        <div id="result-section" class="hidden">
+            <div class="card bg-base-100 border border-base-300 shadow-xl mb-4">
+                <div class="card-body">
+                    <div id="result-badge" class="badge badge-lg mb-3 self-start"></div>
+                    <p id="result-text" class="text-xl leading-relaxed font-medium"></p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="onComplete(true)"
+                    class="btn btn-success btn-lg font-bold">
+                    ✓ Cumplido
+                </button>
+                <button onclick="onComplete(false)"
+                    class="btn btn-error btn-lg font-bold">
+                    ✗ No cumplido
+                </button>
+            </div>
+        </div>
+
+        <!-- Recompensa / Penalización -->
+        <div id="award-section" class="hidden">
+            <div class="card bg-base-100 border border-base-300 shadow-xl mb-4">
+                <div class="card-body items-center text-center">
+                    <div id="award-icon" class="text-6xl mb-1"></div>
+                    <h3 id="award-title" class="text-2xl font-black mb-1"></h3>
+                    <p class="text-base-content/50 text-sm">
+                        <span id="award-player" class="font-bold text-base-content/80"></span>
+                        · <span id="award-counter"></span>
+                    </p>
+                    <div id="award-badge" class="badge badge-lg mt-3 mb-2"></div>
+                    <p id="award-text" class="text-lg font-medium leading-relaxed mt-2"></p>
+                </div>
+            </div>
+            <button id="award-continue" onclick="nextTurn()" class="btn btn-lg w-full font-bold">
+                Continuar →
+            </button>
+        </div>
+
+        <!-- Marcador global -->
+        <div class="mt-6 pt-4 border-t border-base-300">
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-xs text-base-content/30 uppercase tracking-widest">Marcador</p>
+                <button onclick="openAwardsList()" class="btn btn-ghost btn-xs text-base-content/40 gap-1">
+                    👁 Premios y castigos
+                </button>
+            </div>
+            <div id="scoreboard" class="flex flex-col"></div>
+        </div>
+
+    </div>
+
+    <!-- Modal: lista de recompensas y penalizaciones -->
+    <dialog id="awards-modal" class="modal">
+        <div class="modal-box max-w-2xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 id="awards-modal-title" class="font-black text-lg"></h3>
+                <form method="dialog">
+                    <button class="btn btn-ghost btn-sm btn-circle">✕</button>
+                </form>
+            </div>
+            <div id="awards-modal-content"></div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>cerrar</button>
+        </form>
+    </dialog>
+
+    <script src="js/app.js"></script>
 </body>
 </html>

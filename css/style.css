@@ -1,19 +1,33 @@
 /* Animación de entrada para las cards */
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .player-card {
-  animation: slideIn 0.2s ease;
+    animation: slideIn 0.2s ease;
 }
 
-/* Resultado de IA con fade */
+/* Resultado con fade */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 #result-section {
-  animation: fadeIn 0.3s ease;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Botones de selección de género y preferencia */
+.btn-selector {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-selector:hover {
+    transform: scale(1.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.btn-selector:active {
+    transform: scale(0.97);
 }
